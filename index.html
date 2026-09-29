@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2142537377342407"
+     crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=8f7b350b-ee2c-4788-b24a-2413bfd38c18
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<title>Listwise — Instant listing copy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#1c2b3a;
+    --paper:#efe9dc;
+    --paper-2:#e3dbc9;
+    --mustard:#c98a2c;
+    --mustard-dark:#a06e1e;
+    --line:#c7bfa9;
+    --good:#3f6b4a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(201,138,44,0.06), transparent 45%),
+      radial-gradient(circle at 90% 85%, rgba(28,43,58,0.05), transparent 40%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+  }
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:20px;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .wordmark{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:2.4rem;
+    letter-spacing:-0.01em;
+  }
+  .badge{
+    display:inline-block;
+    background:var(--mustard);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:0.65rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:3px 8px;
+    vertical-align:middle;
+    margin-left:10px;
+    border-radius:2px;
+  }
+  .tagline{
+    font-size:0.95rem;
+    max-width:280px;
+    text-align:right;
+    line-height:1.4;
+    color:#4a4033;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:32px;
+  }
+  @media (max-width:800px){
+    .grid{grid-template-columns:1fr;}
+    .tagline{text-align:left;}
+  }
+  .panel{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:28px;
+    box-shadow:0 2px 0 var(--mustard-dark);
+  }
+  label{
+    display:block;
+    font-size:0.82rem;
+    font-weight:600;
+    margin-bottom:6px;
+    margin-top:18px;
+  }
+  label:first-child{margin-top:0;}
+  input, select, textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+  }
+  textarea{resize:vertical; min-height:64px;}
+  input:focus, select:focus, textarea:focus{
+    outline:2px solid var(--mustard-dark);
+    outline-offset:1px;
+  }
+  .row{display:flex; gap:12px;}
+  .row > div{flex:1;}
+  button{
+    margin-top:26px;
+    width:100%;
+    padding:14px;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:0.98rem;
+    cursor:pointer;
+    transition:background 0.15s ease;
+  }
+  button:hover:not(:disabled){background:var(--mustard-dark);}
+  button:disabled{opacity:0.5; cursor:not-allowed;}
+
+  .output-panel{
+    background:var(--paper);
+    border:1px solid var(--line);
+    min-height:400px;
+    padding:0;
+    box-shadow:0 4px 16px rgba(28,43,58,0.08);
+  }
+  .category-strip{
+    display:flex;
+    gap:14px;
+    overflow-x:auto;
+    padding-bottom:8px;
+    margin-bottom:40px;
+  }
+  .category-chip{
+    flex:0 0 auto;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:0.85rem;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .category-chip svg{width:22px; height:22px; stroke:var(--mustard-dark);}
+
+  .empty-state{
+    padding:60px 40px;
+    text-align:center;
+    color:#8a8067;
+  }
+  .empty-state .big{
+    font-family:'Fraunces',serif;
+    font-size:1.3rem;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .listing-card{
+    padding:32px;
+  }
+  .listing-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:1.5rem;
+    line-height:1.3;
+    margin:0 0 4px;
+  }
+  .price-suggestion{
+    color:var(--good);
+    font-weight:600;
+    font-size:0.95rem;
+    margin-bottom:20px;
+  }
+  .section-label{
+    font-size:0.75rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:#8a8067;
+    margin:20px 0 6px;
+  }
+  .description{
+    line-height:1.6;
+    font-size:0.98rem;
+    white-space:pre-wrap;
+  }
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:6px;
+  }
+  .tag{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:5px 12px;
+    font-size:0.82rem;
+    border-radius:2px;
+  }
+  .copy-btn{
+    margin-top:24px;
+    width:auto;
+    padding:9px 18px;
+    background:transparent;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    font-size:0.85rem;
+  }
+  .copy-btn:hover{background:var(--ink); color:var(--paper);}
+  .loading{
+    padding:60px 40px;
+    text-align:center;
+    color:#8a8067;
+  }
+  .error{
+    padding:24px 32px;
+    color:#8a3b2c;
+    font-size:0.9rem;
+  }
+  footer{
+    margin-top:56px;
+    border-top:1px solid var(--line);
+    padding-top:18px;
+    font-size:0.8rem;
+    color:#8a8067;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="wordmark">Listwise<span class="badge">Beta</span></div>
+    <div class="tagline">Turn a rough item description into a ready-to-post listing — title, description, tags, and a price suggestion.</div>
+  </header>
+
+  <div class="panel" id="auth-panel" style="margin-bottom:32px;">
+    <div id="auth-signed-out">
+      <label for="auth-email">Sign in to save your listings (magic link, no password)</label>
+      <div class="row">
+        <div><input id="auth-email" type="email" placeholder="you@email.com"></div>
+        <div style="flex:0 0 auto;"><button style="margin-top:0; padding:10px 20px;" onclick="sendMagicLink()">Send link</button></div>
+      </div>
+      <div id="auth-status" style="margin-top:10px; font-size:0.85rem; color:#4a4033;"></div>
+    </div>
+    <div id="auth-signed-in" style="display:none;">
+      <span id="auth-user-email" style="font-weight:600;"></span>
+      <button style="margin-top:0; margin-left:16px; width:auto; padding:8px 16px; background:transparent; border:1px solid var(--ink); color:var(--ink);" onclick="signOut()">Sign out</button>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:20px; margin-bottom:40px; flex-wrap:wrap;">
+    <div style="flex:1; min-width:180px; border-left:2px solid var(--mustard-dark); padding-left:16px;">
+      <div style="font-family:'Fraunces',serif; font-weight:600; font-size:1.1rem; margin-bottom:4px;">1. Describe it</div>
+      <div style="font-size:0.88rem; color:#4a4033; line-height:1.4;">Type a rough description of your item — brand, condition, whatever you know.</div>
+    </div>
+    <div style="flex:1; min-width:180px; border-left:2px solid var(--mustard-dark); padding-left:16px;">
+      <div style="font-family:'Fraunces',serif; font-weight:600; font-size:1.1rem; margin-bottom:4px;">2. Pick your platform</div>
+      <div style="font-size:0.88rem; color:#4a4033; line-height:1.4;">Etsy, eBay, Poshmark, Depop, or Facebook Marketplace — each gets copy tailored to it.</div>
+    </div>
+    <div style="flex:1; min-width:180px; border-left:2px solid var(--mustard-dark); padding-left:16px;">
+      <div style="font-family:'Fraunces',serif; font-weight:600; font-size:1.1rem; margin-bottom:4px;">3. Copy and post</div>
+      <div style="font-size:0.88rem; color:#4a4033; line-height:1.4;">Get a ready-to-use title, description, tags, and price suggestion in seconds.</div>
+    </div>
+  </div>
+
+  <div class="category-strip">
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 7l2-3h8l2 3M6 7h12M6 7l-1 13a1 1 0 001 1h12a1 1 0 001-1L18 7"/></svg>Clothing</div>
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 17l3-8h4l1 3h6l3 5H3z"/><path d="M6 17v2M18 17v2"/></svg>Sneakers</div>
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>Bags</div>
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>Electronics</div>
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>Vinyl & Media</div>
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="7"/><path d="M12 9v3l2 2"/></svg>Watches</div>
+    <div class="category-chip"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 21V9l8-6 8 6v12H4z"/><path d="M9 21v-6h6v6"/></svg>Home & Decor</div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <label for="item">What are you selling?</label>
+      <textarea id="item" placeholder="e.g. Blue denim jacket, size M, Levi's, light wear on collar, from the 90s"></textarea>
+      <div style="font-size:0.78rem; color:#8a8067; margin-top:4px; line-height:1.4;">List anything legal to sell in your area — just double check the platform's own item policies too (a few categories like alcohol, firearms, or prescription items are restricted on most marketplaces regardless of legality).</div>
+
+      <div class="row">
+        <div>
+          <label for="platform">Platform</label>
+          <input list="platform-options" id="platform" placeholder="Etsy, Walmart Marketplace, Mercari...">
+          <datalist id="platform-options">
+            <option value="Etsy">
+            <option value="eBay">
+            <option value="Poshmark">
+            <option value="Depop">
+            <option value="Facebook Marketplace">
+            <option value="Mercari">
+            <option value="Walmart Marketplace">
+            <option value="Amazon">
+            <option value="OfferUp">
+            <option value="Craigslist">
+            <option value="Grailed">
+            <option value="Vinted">
+            <option value="ThredUp">
+            <option value="StockX">
+            <option value="GOAT">
+          </datalist>
+        </div>
+        <div>
+          <label for="condition">Condition</label>
+          <select id="condition">
+            <option>New with tags</option>
+            <option>New without tags</option>
+            <option>Excellent used</option>
+            <option>Good, visible wear</option>
+            <option>Fair / for parts</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="vibe">Tone</label>
+      <select id="vibe">
+        <option>Warm & personal</option>
+        <option>Punchy & sales-y</option>
+        <option>Minimal & clean</option>
+        <option>Vintage / thrifted charm</option>
+      </select>
+
+      <label style="display:flex; align-items:flex-start; gap:8px; margin-top:18px; font-weight:400; font-size:0.85rem; cursor:pointer;">
+        <input type="checkbox" id="legal-confirm" style="width:auto; margin-top:3px;">
+        <span>I confirm this item is legal to sell, and if it's an age-restricted category (like alcohol), I'm authorized to sell it and will follow that platform's verification requirements.</span>
+      </label>
+
+      <button id="genBtn" onclick="generateListing()">Generate listing</button>
+    </div>
+
+    <div class="output-panel" id="output">
+      <div class="empty-state">
+        <div class="big">Nothing generated yet</div>
+        <div>Fill in the item details on the left and hit generate.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Listwise · built for resellers who'd rather ship inventory than write copy.
+    <br>Also: don't do anything stupid. You know what we mean.
+    <br><a href="privacy.html" style="color:#8a8067;">Privacy & Terms</a>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+// ---- Fill these in with YOUR Supabase project values (Project Settings → API) ----
+const SUPABASE_URL = "https://hrccamxqhlspbpvkcqey.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyY2NhbXhxaGxzcGJwdmtjcWV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDM0NTUsImV4cCI6MjEwMzk3OTQ1NX0.c7lnf2dFS4TYNVX2YvsJaEM5ItjGkkn4hKOEl7m-jc4";
+// -----------------------------------------------------------------------------------
+
+const supabaseClient = (SUPABASE_URL.startsWith("http"))
+  ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+async function sendMagicLink() {
+  const email = document.getElementById('auth-email').value.trim();
+  const status = document.getElementById('auth-status');
+  if (!supabaseClient) {
+    status.textContent = "Auth isn't configured yet — add your Supabase URL and anon key in the script.";
+    return;
+  }
+  if (!email) {
+    status.textContent = "Enter your email first.";
+    return;
+  }
+  status.textContent = "Sending...";
+  const { error } = await supabaseClient.auth.signInWithOtp({ email });
+  status.textContent = error ? "Something went wrong — try again." : "Check your email for a sign-in link.";
+}
+
+async function signOut() {
+  if (!supabaseClient) return;
+  await supabaseClient.auth.signOut();
+  updateAuthUI(null);
+}
+
+function updateAuthUI(user) {
+  const signedOut = document.getElementById('auth-signed-out');
+  const signedIn = document.getElementById('auth-signed-in');
+  if (user) {
+    signedOut.style.display = 'none';
+    signedIn.style.display = 'block';
+    document.getElementById('auth-user-email').textContent = user.email;
+  } else {
+    signedOut.style.display = 'block';
+    signedIn.style.display = 'none';
+  }
+}
+
+// On load, check if already signed in, and listen for auth changes (e.g. after clicking the magic link)
+if (supabaseClient) {
+  supabaseClient.auth.getSession().then(({ data }) => {
+    updateAuthUI(data.session ? data.session.user : null);
+  });
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    updateAuthUI(session ? session.user : null);
+  });
+}
+
+const FREE_MONTHLY_LIMIT = 3;
+
+function currentMonthKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+async function getIsPro(userId) {
+  const { data, error } = await supabaseClient
+    .from('user_status')
+    .select('is_pro')
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error) { console.error(error); return false; }
+  return data ? data.is_pro : false;
+}
+
+async function getUsageCount(userId) {
+  const { data, error } = await supabaseClient
+    .from('usage_counts')
+    .select('count')
+    .eq('user_id', userId)
+    .eq('month', currentMonthKey())
+    .maybeSingle();
+  if (error) { console.error(error); return 0; }
+  return data ? data.count : 0;
+}
+
+async function incrementUsageCount(userId, currentCount) {
+  const { error } = await supabaseClient
+    .from('usage_counts')
+    .upsert({ user_id: userId, month: currentMonthKey(), count: currentCount + 1 });
+  if (error) console.error(error);
+}
+
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/cNibJ16eJ8hhfi8enDbAs00";
+
+async function generateListing() {
+  const item = document.getElementById('item').value.trim();
+  const platform = document.getElementById('platform').value;
+  const condition = document.getElementById('condition').value;
+  const vibe = document.getElementById('vibe').value;
+  const output = document.getElementById('output');
+  const btn = document.getElementById('genBtn');
+
+  if (!item) {
+    output.innerHTML = '<div class="error">Add a quick description of the item first.</div>';
+    return;
+  }
+
+  if (!document.getElementById('legal-confirm').checked) {
+    output.innerHTML = '<div class="error">Please confirm the legal/authorization checkbox above first.</div>';
+    return;
+  }
+
+  let userId = null;
+  if (supabaseClient) {
+    const { data } = await supabaseClient.auth.getSession();
+    if (!data.session) {
+      output.innerHTML = '<div class="error">Sign in above first — free listings are tracked per account.</div>';
+      return;
+    }
+    userId = data.session.user.id;
+
+    const isPro = await getIsPro(userId);
+    if (!isPro) {
+      const used = await getUsageCount(userId);
+      if (used >= FREE_MONTHLY_LIMIT) {
+        output.innerHTML = `
+          <div class="error">
+            You've used all ${FREE_MONTHLY_LIMIT} free listings this month.
+            <br><br>
+            <a href="${STRIPE_PAYMENT_LINK}" target="_blank" style="display:inline-block; background:var(--ink); color:var(--paper); padding:10px 20px; text-decoration:none; font-weight:600;">Upgrade to Listwise Pro</a>
+          </div>`;
+        return;
+      }
+    }
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  output.innerHTML = '<div class="loading">Writing your listing…</div>';
+
+  const prompt = `You are a copywriter for online resellers. Given this item, write listing copy for ${platform}.
+Item: ${item}
+Condition: ${condition}
+Tone: ${vibe}
+
+Respond ONLY with valid JSON, no markdown fences, no preamble, in this exact shape:
+{"title": "string, platform-appropriate length and SEO style", "description": "2-4 short paragraphs, plain text, no markdown", "tags": ["array", "of", "8-12", "lowercase", "keywords"], "price_suggestion": "string like \\"$18-24\\" with one sentence of reasoning"}`;
+
+  try {
+    const response = await fetch("https://hrccamxqhlspbpvkcqey.supabase.co/functions/v1/generate-listing", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({ item, platform, condition, vibe })
+    });
+
+    const listing = await response.json();
+    if (listing.error) throw new Error(listing.error);
+
+    output.innerHTML = `
+      <div class="listing-card">
+        <div class="listing-title">${escapeHtml(listing.title)}</div>
+        <div class="price-suggestion">Suggested price: ${escapeHtml(listing.price_suggestion)}</div>
+        <div class="section-label">Description</div>
+        <div class="description">${escapeHtml(listing.description)}</div>
+        <div class="section-label">Tags</div>
+        <div class="tags">${listing.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
+        <button class="copy-btn" onclick="copyListing(this)" data-title="${encodeURIComponent(listing.title)}" data-desc="${encodeURIComponent(listing.description)}" data-tags="${encodeURIComponent(listing.tags.join(', '))}">Copy all</button>
+      </div>
+    `;
+
+    if (supabaseClient && userId) {
+      const used = await getUsageCount(userId);
+      await incrementUsageCount(userId, used);
+    }
+  } catch (err) {
+    output.innerHTML = `<div class="error">Something went wrong generating the listing. Try again — if it persists, simplify the item description.</div>`;
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate listing';
+  }
+}
+
+function copyListing(el) {
+  const title = decodeURIComponent(el.dataset.title);
+  const desc = decodeURIComponent(el.dataset.desc);
+  const tags = decodeURIComponent(el.dataset.tags);
+  const text = `${title}\n\n${desc}\n\nTags: ${tags}`;
+  navigator.clipboard.writeText(text);
+  el.textContent = 'Copied';
+  setTimeout(() => { el.textContent = 'Copy all'; }, 1500);
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
